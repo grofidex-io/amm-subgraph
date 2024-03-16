@@ -7,16 +7,10 @@
   "license": "GPL-3.0-or-later",
   "scripts": {
     "template": "mustache ../../../config/$NETWORK.js subgraph.template.yaml > subgraph.yaml && mustache ../../../config/$NETWORK.js utils/constants.template.ts > utils/constants.ts && mustache ../../../config/$NETWORK.js utils/pricing.template.ts > utils/pricing.ts",
-    "auth": "graph auth --product hosted-service SUBGRAPH_KEY",
     "codegen": "graph codegen subgraph.yaml",
     "build": "graph build subgraph.yaml",
-    "deploy:goerli": "graph deploy --product hosted-service --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pancakeswap/exchange-v3-goerli subgraph.yaml",
-    "deploy:chapel": "graph deploy --product hosted-service --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pancakeswap/exchange-v3-chapel subgraph.yaml",
-    "deploy:eth": "graph deploy --product hosted-service --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pancakeswap/exchange-v3-eth subgraph.yaml",
-    "deploy:bsc": "graph deploy --product hosted-service --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pancakeswap/exchange-v3-bsc subgraph.yaml",
-    "deploy:zksync-goerli": "graph deploy --product hosted-service --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ chef-jojo/exchange-v3-zksync-goerli subgraph.yaml",
-    "deploy:arb": "graph deploy --product hosted-service pancakeswap/exchange-v3-arb",
-    "deploy:polygon-zkevm-testnet": "graph deploy --studio exchange-v3-polygon-zkevm-test",
-    "deploy:opbnb": "graph deploy --node https://open-platform-ap.nodereal.io/$API_KEY/opbnb-mainnet-graph-indexer/ --ipfs https://api.thegraph.com/ipfs/ pancakeswap/exchange-v3"
+    "create-local": "graph create --node http://localhost:8021/ u2u-amm/f-v3-exchange subgraph.yaml",
+    "remove-local": "graph remove --node http://localhost:8021/ u2u-amm/f-v3-exchange",
+    "deploy-local": "graph deploy --node http://localhost:8021/ --ipfs http://localhost:5002 u2u-amm/f-v3-exchange subgraph.yaml -l v0.0.1"
   }
 }
