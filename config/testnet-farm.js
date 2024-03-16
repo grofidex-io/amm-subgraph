@@ -1,8 +1,3 @@
-/**
- * @type import('./config').NetworkConfig
- */
-
-
 const NATIVE_ADDRESS = '0x4b9f8077856d81c5e97948dbec8960024d4908c1'
 const WBTC_ADDRESS = '0x5289638b40725fb3c33f801d1a339878674ff555'
 const DAI_ADDRESS = '0x73fe4db0779022ff9c0b32ef2644272b32bef5b7'
@@ -13,7 +8,9 @@ const WXRP_ADDRESS = '0xfd38a31834ccb29fa16c98b6c7a22283c3ceaba0'
 const BUSD_ADDRESS = '0xc845fc63a5a69637ebe0d960fbfa33671a1e21e0'
 const XSUSHI_ADDRESS = '0xb7739ebf389dd3b647e15105c6465be975088d0d'
 
-
+/**
+ * @type import('./config').NetworkConfig
+ */
 module.exports = {
   network: "testnet",
   wNativeAddress: NATIVE_ADDRESS,
@@ -21,8 +18,8 @@ module.exports = {
     // WBNB-USDT 500
     wNativeStablePoolAddress: "0x28ad4a77c63068425a34c1e375382a96084d2cbc",
     stableIsToken0: true,
-    factoryAddress: "0x0bfbcf9fa4f9c56b0f40a671ad40e0805a091865",
-    startBlock: 26956207,
+    factoryAddress: "0x0215b80E78e51F874819ab998B468c32922ae765",
+    startBlock: 19094148,
     stableCoins: [
       USDC_ADDRESS,
       USDT_ADDRESS,
