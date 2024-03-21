@@ -6,11 +6,12 @@
   "author": "PancakeSwap",
   "license": "GPL-3.0-or-later",
   "scripts": {
-    "template": "mustache ../../../config/$NETWORK.js subgraph.template.yaml > subgraph.yaml && mustache ../../../config/$NETWORK.js utils/constants.template.ts > utils/constants.ts && mustache ../../../config/$NETWORK.js utils/pricing.template.ts > utils/pricing.ts",
+    "template": "mustache ../../../config/testnet-farm.js subgraph.template.yaml > subgraph.yaml && mustache ../../../config/testnet-farm.js utils/constants.template.ts > utils/constants.ts && mustache ../../../config/testnet-farm.js utils/pricing.template.ts > utils/pricing.ts",
     "codegen": "graph codegen subgraph.yaml",
     "build": "graph build subgraph.yaml",
     "create-local": "graph create --node http://localhost:8021/ u2u-amm/u2dex subgraph.yaml",
     "remove-local": "graph remove --node http://localhost:8021/ u2u-amm/u2dex",
-    "deploy-local": "graph deploy --node http://localhost:8021/ --ipfs http://localhost:5002 u2u-amm/u2dex subgraph.yaml -l v0.0.1"
+    "deploy-local": "graph deploy --node http://localhost:8021/ --ipfs http://localhost:5002 u2u-amm/u2dex subgraph.yaml -l v0.0.1",
+    "deploy-all": "npm run template && npm run codegen && npm run build && npm run remove-local && npm run create-local && npm run deploy-local"
   }
 }
