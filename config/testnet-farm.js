@@ -16,10 +16,10 @@ module.exports = {
   wNativeAddress: NATIVE_ADDRESS,
   v3: {
     // WBNB-USDT 500
-    wNativeStablePoolAddress: "0xa6e2efaf418695657979f3797e91463be2061fb1",
+    wNativeStablePoolAddress: "0xe63b700c87b8058f439189732c4e8a90baf180ae",
     stableIsToken0: true,
-    factoryAddress: "0x97c54780a0af47f1b33c1f2e3e332359a22ebeca",
-    startBlock: 19498475,
+    factoryAddress: "0x179565391ad2318c356ab0a41d2e06e24dc90634",
+    startBlock: 19515326,
     stableCoins: [
       USDC_ADDRESS,
       USDT_ADDRESS,
@@ -37,13 +37,13 @@ module.exports = {
       BUSD_ADDRESS,
       WXRP_ADDRESS
     ],
-    nonfungiblePositionManagerAddress: "0xc375af1b833b63cac9495b0bd7875f4d55c7b1c1",
-    nonfungiblePositionManagerStartBlock: 19498486,
+    nonfungiblePositionManagerAddress: "0x33a488dc2dbf4d6ccb314cbe3f476f016111b960",
+    nonfungiblePositionManagerStartBlock: 19515345,
     minETHLocked: 1,
   },
   masterChefV3: {
-    masterChefAddress: "0x9f9cb02ef4709ff280c844e9ffe7ff0abb7513e5",
-    startBlock: 19498502,
+    masterChefAddress: "0x94afd23a799a172585f0180d8c9612032076c928",
+    startBlock: 19515365,
   },
   predictionV2: {
     startBlock: 10333825,
