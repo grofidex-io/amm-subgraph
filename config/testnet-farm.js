@@ -1,12 +1,11 @@
-const NATIVE_ADDRESS = '0x4b9f8077856d81c5e97948dbec8960024d4908c1'
-const WBTC_ADDRESS = '0x5289638b40725fb3c33f801d1a339878674ff555'
+const NATIVE_ADDRESS = '0x33dbb072e53cf0dd0fd55b19ffdb4e794364d666'
+const WBTC_ADDRESS = '0x9a599da01fd5193ca5060d7eae650889b18e5e64'
+const WETH_ADDRESS = '0x0a3c7baf490d9f5d77412051cbdf0a11ae7f6950'
 const DAI_ADDRESS = '0x73fe4db0779022ff9c0b32ef2644272b32bef5b7'
-const USDC_ADDRESS = '0x9a0359e8432c856e1eefc6f2e242b5dfed41b3ec'
-const USDT_ADDRESS = '0xf13d179f157a6202cede6a78a197eacee656440a'
-const SUSHI_ADDRESS = '0xd0c8ec558e16361064f3d1240d0e5472943ea340'
+const USDT_ADDRESS = '0x5b14303c782635acfdcfc9ceab251b369ece68c9'
+const WBNB_ADDRESS = '0x2ab42afc0e59fad4faebea40321479a9fb6440b9'
 const WXRP_ADDRESS = '0xfd38a31834ccb29fa16c98b6c7a22283c3ceaba0'
 const BUSD_ADDRESS = '0xc845fc63a5a69637ebe0d960fbfa33671a1e21e0'
-const XSUSHI_ADDRESS = '0xb7739ebf389dd3b647e15105c6465be975088d0d'
 
 /**
  * @type import('./config').NetworkConfig
@@ -16,12 +15,11 @@ module.exports = {
   wNativeAddress: NATIVE_ADDRESS,
   v3: {
     // WBNB-USDT 500
-    wNativeStablePoolAddress: "0x8b8c0153a4367ec99c05294310e0191f8abffd0e",
+    wNativeStablePoolAddress: "0x6b9a3ed386efe88754939ea344be168a6252bc66",
     stableIsToken0: true,
-    factoryAddress: "0x45e54eee844b41c204b6ffdd4c4c55311e270084",
-    startBlock: 19538532,
+    factoryAddress: "0xd85086fb4b265508300224ddc26db8d636a6b280",
+    startBlock: 19566624,
     stableCoins: [
-      USDC_ADDRESS,
       USDT_ADDRESS,
       DAI_ADDRESS,
       BUSD_ADDRESS
@@ -30,20 +28,19 @@ module.exports = {
       NATIVE_ADDRESS,
       WBTC_ADDRESS,
       DAI_ADDRESS,
-      USDC_ADDRESS,
       USDT_ADDRESS,
-      XSUSHI_ADDRESS,
-      SUSHI_ADDRESS,
       BUSD_ADDRESS,
-      WXRP_ADDRESS
+      WXRP_ADDRESS,
+      WBNB_ADDRESS,
+      WETH_ADDRESS
     ],
-    nonfungiblePositionManagerAddress: "0xbcc3225c004ecf6411e7a69f41667e3b4f3ecb61",
-    nonfungiblePositionManagerStartBlock: 19538542,
+    nonfungiblePositionManagerAddress: "0x7cfaacb83be5326ecadeedfcde7850ee13d109c6",
+    nonfungiblePositionManagerStartBlock: 19566636,
     minETHLocked: 1,
   },
   masterChefV3: {
-    masterChefAddress: "0x7a7880f4A7465fB4075402E44168690959f99449",
-    startBlock: 19538555,
+    masterChefAddress: "0x73849a2e581a32e326ac3236f448f5ea17e6da41",
+    startBlock: 19566655,
   },
   predictionV2: {
     startBlock: 10333825,
