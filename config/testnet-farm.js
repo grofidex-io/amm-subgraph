@@ -16,7 +16,7 @@ module.exports = {
   v3: {
     // WBNB-USDT 500
     wNativeStablePoolAddress: "0xcf5f8e8d80a95aa73e0e1395c79273df5040b4c2",
-    stableIsToken0: true,
+    stableIsToken0: false,
     factoryAddress: "0x2aac369c33edc60ec13249004f7bd25c8d318eff",
     startBlock: 19589488,
     stableCoins: [
