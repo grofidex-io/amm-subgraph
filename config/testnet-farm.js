@@ -47,8 +47,8 @@ module.exports = {
     minETHLocked: 1,
   },
   masterChefV3: {
-    masterChefAddress: "0x855b2d5142f6abd6ac691f4696050f563a212dcc",
-    startBlock: 19639788,
+    masterChefAddress: "0x4a5f63c11fd5bd463e9595d52f155cdaf48d7edc",
+    startBlock: 19887943,
   },
   predictionV2: {
     startBlock: 10333825,
