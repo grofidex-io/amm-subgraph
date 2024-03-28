@@ -57,15 +57,7 @@ export function handleInitialize(event: Initialize): void {
   bundle.save();
 
   updatePoolDayData(event);
-  updatePoolWeekData(event);
-  updatePoolMinuteData(event);
-  updatePool5MinuteData(event);
-  updatePool15MinuteData(event);
-  updatePool30MinuteData(event);
-  updatePoolMonthData(event);
   updatePoolHourData(event);
-  updatePoolDayCandleData(event);
-  updatePoolHourCandleData(event);
 
   // update token prices
   token0.derivedETH = findEthPerToken(token0 as Token);
@@ -170,15 +162,7 @@ export function handleMint(event: MintEvent): void {
 
   updatePancakeDayData(event);
   updatePoolDayData(event);
-  updatePoolWeekData(event);
-  updatePoolMinuteData(event);
-  updatePool5MinuteData(event);
-  updatePool15MinuteData(event);
-  updatePool30MinuteData(event);
-  updatePoolMonthData(event);
   updatePoolHourData(event);
-  updatePoolDayCandleData(event);
-  updatePoolHourCandleData(event);
   updateTokenDayData(token0 as Token, event);
   updateTokenDayData(token1 as Token, event);
   updateTokenHourData(token0 as Token, event);
@@ -273,15 +257,7 @@ export function handleBurn(event: BurnEvent): void {
 
   updatePancakeDayData(event);
   updatePoolDayData(event);
-  updatePoolWeekData(event);
-  updatePoolMinuteData(event);
-  updatePool5MinuteData(event);
-  updatePool15MinuteData(event);
-  updatePool30MinuteData(event);
-  updatePoolMonthData(event);
   updatePoolHourData(event);
-  updatePoolDayCandleData(event);
-  updatePoolHourCandleData(event);
   updateTokenDayData(token0 as Token, event);
   updateTokenDayData(token1 as Token, event);
   updateTokenHourData(token0 as Token, event);
