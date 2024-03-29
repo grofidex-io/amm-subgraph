@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable prefer-const */
-import { Bundle, Burn, Factory, Mint, Pool, Swap, Tick, Token, Collect } from "../generated/schema";
+import { Bundle, Burn, Factory, Mint, Pool, Swap, Tick, Token, Collect, PoolWeekCandleData } from "../generated/schema";
 import { Pool as PoolABI } from "../generated/Factory/Pool";
 import { BigDecimal, BigInt, ethereum } from "@graphprotocol/graph-ts";
 import {
@@ -27,6 +28,14 @@ import {
   updateTokenDayData,
   updateTokenHourData,
   updatePancakeDayData,
+  updatePoolWeekData,
+  updatePool15MinuteData,
+  updatePool30MinuteData,
+  updatePool5MinuteData,
+  updatePoolMinuteData,
+  updatePoolMonthData,
+  updatePoolDayCandleData,
+  updatePoolHourCandleData,
 } from "../utils/intervalUpdates";
 import { createTick, feeTierToTickSpacing } from "../utils/tick";
 import { updateDerivedTVLAmounts } from "../utils/tvl";
@@ -402,7 +411,15 @@ export function handleSwap(event: SwapEvent): void {
   // interval data
   let pancakeDayData = updatePancakeDayData(event);
   let poolDayData = updatePoolDayData(event);
+  let poolMinuteData = updatePoolMinuteData(event);
+  let pool5MinuteData = updatePool5MinuteData(event);
+  let pool15MinuteData = updatePool15MinuteData(event);
+  let pool30MinuteData = updatePool30MinuteData(event);
+  let poolMonthData = updatePoolMonthData(event);
+  let poolWeekData = updatePoolWeekData(event);
   let poolHourData = updatePoolHourData(event);
+  let poolDayCandle = updatePoolDayCandleData(event);
+  let poolHourCandle = updatePoolHourCandleData(event);
   let token0DayData = updateTokenDayData(token0 as Token, event);
   let token1DayData = updateTokenDayData(token1 as Token, event);
   let token0HourData = updateTokenHourData(token0 as Token, event);
@@ -420,11 +437,59 @@ export function handleSwap(event: SwapEvent): void {
   poolDayData.feesUSD = poolDayData.feesUSD.plus(feesUSD);
   poolDayData.protocolFeesUSD = poolDayData.protocolFeesUSD.plus(protocolFeeAmounts.usd);
 
+  poolWeekData.volumeUSD = poolWeekData.volumeUSD.plus(volumeUSD);
+  poolWeekData.volumeToken0 = poolWeekData.volumeToken0.plus(amount0Abs);
+  poolWeekData.volumeToken1 = poolWeekData.volumeToken1.plus(amount1Abs);
+  poolWeekData.feesUSD = poolWeekData.feesUSD.plus(feesUSD);
+  poolWeekData.protocolFeesUSD = poolWeekData.protocolFeesUSD.plus(protocolFeeAmounts.usd);
+
+  poolMonthData.volumeUSD = poolMonthData.volumeUSD.plus(volumeUSD);
+  poolMonthData.volumeToken0 = poolMonthData.volumeToken0.plus(amount0Abs);
+  poolMonthData.volumeToken1 = poolMonthData.volumeToken1.plus(amount1Abs);
+  poolMonthData.feesUSD = poolMonthData.feesUSD.plus(feesUSD);
+  poolMonthData.protocolFeesUSD = poolMonthData.protocolFeesUSD.plus(protocolFeeAmounts.usd);
+
+  poolDayCandle.volumeUSD = poolDayCandle.volumeUSD.plus(volumeUSD);
+  poolDayCandle.volumeToken0 = poolDayCandle.volumeToken0.plus(amount0Abs);
+  poolDayCandle.volumeToken1 = poolDayCandle.volumeToken1.plus(amount1Abs);
+  poolDayCandle.feesUSD = poolDayCandle.feesUSD.plus(feesUSD);
+  poolDayCandle.protocolFeesUSD = poolDayCandle.protocolFeesUSD.plus(protocolFeeAmounts.usd);
+
+  poolHourCandle.volumeUSD = poolHourCandle.volumeUSD.plus(volumeUSD);
+  poolHourCandle.volumeToken0 = poolHourCandle.volumeToken0.plus(amount0Abs);
+  poolHourCandle.volumeToken1 = poolHourCandle.volumeToken1.plus(amount1Abs);
+  poolHourCandle.feesUSD = poolHourCandle.feesUSD.plus(feesUSD);
+  poolHourCandle.protocolFeesUSD = poolHourCandle.protocolFeesUSD.plus(protocolFeeAmounts.usd);
+
   poolHourData.volumeUSD = poolHourData.volumeUSD.plus(volumeUSD);
   poolHourData.volumeToken0 = poolHourData.volumeToken0.plus(amount0Abs);
   poolHourData.volumeToken1 = poolHourData.volumeToken1.plus(amount1Abs);
   poolHourData.feesUSD = poolHourData.feesUSD.plus(feesUSD);
   poolHourData.protocolFeesUSD = poolHourData.protocolFeesUSD.plus(protocolFeeAmounts.usd);
+
+  poolMinuteData.volumeUSD = poolMinuteData.volumeUSD.plus(volumeUSD);
+  poolMinuteData.volumeToken0 = poolMinuteData.volumeToken0.plus(amount0Abs);
+  poolMinuteData.volumeToken1 = poolMinuteData.volumeToken1.plus(amount1Abs);
+  poolMinuteData.feesUSD = poolMinuteData.feesUSD.plus(feesUSD);
+  poolMinuteData.protocolFeesUSD = poolMinuteData.protocolFeesUSD.plus(protocolFeeAmounts.usd);
+
+  pool5MinuteData.volumeUSD = pool5MinuteData.volumeUSD.plus(volumeUSD);
+  pool5MinuteData.volumeToken0 = pool5MinuteData.volumeToken0.plus(amount0Abs);
+  pool5MinuteData.volumeToken1 = pool5MinuteData.volumeToken1.plus(amount1Abs);
+  pool5MinuteData.feesUSD = pool5MinuteData.feesUSD.plus(feesUSD);
+  pool5MinuteData.protocolFeesUSD = pool5MinuteData.protocolFeesUSD.plus(protocolFeeAmounts.usd);
+
+  pool15MinuteData.volumeUSD = pool15MinuteData.volumeUSD.plus(volumeUSD);
+  pool15MinuteData.volumeToken0 = pool15MinuteData.volumeToken0.plus(amount0Abs);
+  pool15MinuteData.volumeToken1 = pool15MinuteData.volumeToken1.plus(amount1Abs);
+  pool15MinuteData.feesUSD = pool15MinuteData.feesUSD.plus(feesUSD);
+  pool15MinuteData.protocolFeesUSD = pool15MinuteData.protocolFeesUSD.plus(protocolFeeAmounts.usd);
+
+  pool30MinuteData.volumeUSD = pool30MinuteData.volumeUSD.plus(volumeUSD);
+  pool30MinuteData.volumeToken0 = pool30MinuteData.volumeToken0.plus(amount0Abs);
+  pool30MinuteData.volumeToken1 = pool30MinuteData.volumeToken1.plus(amount1Abs);
+  pool30MinuteData.feesUSD = pool30MinuteData.feesUSD.plus(feesUSD);
+  pool30MinuteData.protocolFeesUSD = pool30MinuteData.protocolFeesUSD.plus(protocolFeeAmounts.usd);
 
   token0DayData.volume = token0DayData.volume.plus(amount0Abs);
   token0DayData.volumeUSD = token0DayData.volumeUSD.plus(volumeUSD);
@@ -462,6 +527,14 @@ export function handleSwap(event: SwapEvent): void {
   token1HourData.save();
   token0.save();
   token1.save();
+  pool15MinuteData.save();
+  poolMinuteData.save();
+  pool5MinuteData.save();
+  pool30MinuteData.save();
+  poolHourCandle.save();
+  poolDayCandle.save();
+  poolWeekData.save();
+  poolMonthData.save();
 
   // Update inner vars of current or crossed ticks
   let newTick = pool.tick!;

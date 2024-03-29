@@ -145,7 +145,7 @@ type Pool @entity {
   totalValueLockedUSD: BigDecimal!
   # TVL derived in USD untracked
   totalValueLockedUSDUntracked: BigDecimal!
-    # TVL derived in ETH untracked
+  # TVL derived in ETH untracked
   totalValueLockedETHUntracked: BigDecimal!
   # Fields used to help derived relationship
   liquidityProviderCount: BigInt! # used to detect new exchanges
@@ -153,6 +153,22 @@ type Pool @entity {
   poolHourData: [PoolHourData!]! @derivedFrom(field: "pool")
   # daily snapshots of pool data
   poolDayData: [PoolDayData!]! @derivedFrom(field: "pool")
+  # daily snapshots of pool data
+  poolHourCandleData: [PoolHourCandleData!]! @derivedFrom(field: "pool")
+  # daily snapshots of pool data
+  poolDayCandleData: [PoolDayCandleData!]! @derivedFrom(field: "pool")
+  # daily snapshots of pool data
+  poolWeekCandleData: [PoolWeekCandleData!]! @derivedFrom(field: "pool")
+  # daily snapshots of pool data
+  poolMinuteCandleData: [PoolMinuteCandleData!]! @derivedFrom(field: "pool")
+  # daily snapshots of pool data
+  pool5MinuteCandleData: [Pool5MinuteCandleData!]! @derivedFrom(field: "pool")
+  # daily snapshots of pool data
+  pool15MinuteCandleData: [Pool15MinuteCandleData!]! @derivedFrom(field: "pool")
+  # daily snapshots of pool data
+  pool30MinuteCandleData: [Pool30MinuteCandleData!]! @derivedFrom(field: "pool")
+  # daily snapshots of pool data
+  poolMonthCandleData: [PoolMonthCandleData!]! @derivedFrom(field: "pool")
   # derived fields
   mints: [Mint!]! @derivedFrom(field: "pool")
   burns: [Burn!]! @derivedFrom(field: "pool")
@@ -474,6 +490,112 @@ type PancakeDayData @entity {
 }
 
 # Data accumulated and condensed into day stats for each pool
+type PoolWeekCandleData @entity {
+  # timestamp rounded to current day by dividing by 86400
+  id: ID!
+  # timestamp rounded to current day by dividing by 86400
+  date: Int!
+  # pointer to pool
+  pool: Pool!
+  # in range liquidity at end of period
+  liquidity: BigInt!
+  # current price tracker at end of period
+  sqrtPrice: BigInt!
+  # price of token0 - derived from sqrtPrice
+  token0Price: BigDecimal!
+  # price of token1 - derived from sqrtPrice
+  token1Price: BigDecimal!
+  # current tick at end of period
+  tick: BigInt
+  # tracker for global fee growth
+  feeGrowthGlobal0X128: BigInt!
+  # tracker for global fee growth
+  feeGrowthGlobal1X128: BigInt!
+  # tvl derived in USD at end of period
+  tvlUSD: BigDecimal!
+  # volume in token0
+  volumeToken0: BigDecimal!
+  # volume in token1
+  volumeToken1: BigDecimal!
+  # volume in USD
+  volumeUSD: BigDecimal!
+  # fees in USD
+  feesUSD: BigDecimal!
+  # protocol fees in USD
+  protocolFeesUSD: BigDecimal!
+  # numebr of transactions during period
+  txCount: BigInt!
+  # opening price of token0
+  open0: BigDecimal!
+  # high price of token0
+  high0: BigDecimal!
+  # low price of token0
+  low0: BigDecimal!
+  # close price of token0
+  close0: BigDecimal!
+  open1: BigDecimal!
+  # high price of token0
+  high1: BigDecimal!
+  # low price of token0
+  low1: BigDecimal!
+  # close price of token0
+  close1: BigDecimal!
+}
+
+type PoolMonthCandleData @entity {
+  # timestamp rounded to current day by dividing by 86400
+  id: ID!
+  # timestamp rounded to current day by dividing by 86400
+  date: Int!
+  # pointer to pool
+  pool: Pool!
+  # in range liquidity at end of period
+  liquidity: BigInt!
+  # current price tracker at end of period
+  sqrtPrice: BigInt!
+  # price of token0 - derived from sqrtPrice
+  token0Price: BigDecimal!
+  # price of token1 - derived from sqrtPrice
+  token1Price: BigDecimal!
+  # current tick at end of period
+  tick: BigInt
+  # tracker for global fee growth
+  feeGrowthGlobal0X128: BigInt!
+  # tracker for global fee growth
+  feeGrowthGlobal1X128: BigInt!
+  # tvl derived in USD at end of period
+  tvlUSD: BigDecimal!
+  # volume in token0
+  volumeToken0: BigDecimal!
+  # volume in token1
+  volumeToken1: BigDecimal!
+  # volume in USD
+  volumeUSD: BigDecimal!
+  # fees in USD
+  feesUSD: BigDecimal!
+  # protocol fees in USD
+  protocolFeesUSD: BigDecimal!
+  # numebr of transactions during period
+  txCount: BigInt!
+  # opening price of token0
+  open0: BigDecimal!
+  # high price of token0
+  high0: BigDecimal!
+  # low price of token0
+  low0: BigDecimal!
+  # close price of token0
+  close0: BigDecimal!
+  # opening price of token0
+  open1: BigDecimal!
+  # high price of token0
+  high1: BigDecimal!
+  # low price of token0
+  low1: BigDecimal!
+  # close price of token0
+  close1: BigDecimal!
+}
+
+# Data accumulated and condensed into day stats for each pool
 type PoolDayData @entity {
   # timestamp rounded to current day by dividing by 86400
   id: ID!
@@ -517,6 +639,113 @@ type PoolDayData @entity {
   low: BigDecimal!
   # close price of token0
   close: BigDecimal!
+}
+
+type PoolDayCandleData @entity {
+  # timestamp rounded to current day by dividing by 86400
+  id: ID!
+  # timestamp rounded to current day by dividing by 86400
+  date: Int!
+  # pointer to pool
+  pool: Pool!
+  # in range liquidity at end of period
+  liquidity: BigInt!
+  # current price tracker at end of period
+  sqrtPrice: BigInt!
+  # price of token0 - derived from sqrtPrice
+  token0Price: BigDecimal!
+  # price of token1 - derived from sqrtPrice
+  token1Price: BigDecimal!
+  # current tick at end of period
+  tick: BigInt
+  # tracker for global fee growth
+  feeGrowthGlobal0X128: BigInt!
+  # tracker for global fee growth
+  feeGrowthGlobal1X128: BigInt!
+  # tvl derived in USD at end of period
+  tvlUSD: BigDecimal!
+  # volume in token0
+  volumeToken0: BigDecimal!
+  # volume in token1
+  volumeToken1: BigDecimal!
+  # volume in USD
+  volumeUSD: BigDecimal!
+  # fees in USD
+  feesUSD: BigDecimal!
+  # protocol fees in USD
+  protocolFeesUSD: BigDecimal!
+  # numebr of transactions during period
+  txCount: BigInt!
+  # opening price of token0
+  open0: BigDecimal!
+  # high price of token0
+  high0: BigDecimal!
+  # low price of token0
+  low0: BigDecimal!
+  # close price of token0
+  close0: BigDecimal!
+  # opening price of token0
+  open1: BigDecimal!
+  # high price of token0
+  high1: BigDecimal!
+  # low price of token0
+  low1: BigDecimal!
+  # close price of token0
+  close1: BigDecimal!
+}
+
+# hourly stats tracker for pool
+type PoolHourCandleData @entity {
+  # format: <pool address>-<timestamp>
+  id: ID!
+  # unix timestamp for start of hour
+  periodStartUnix: Int!
+  # pointer to pool
+  pool: Pool!
+  # in range liquidity at end of period
+  liquidity: BigInt!
+  # current price tracker at end of period
+  sqrtPrice: BigInt!
+  # price of token0 - derived from sqrtPrice
+  token0Price: BigDecimal!
+  # price of token1 - derived from sqrtPrice
+  token1Price: BigDecimal!
+  # current tick at end of period
+  tick: BigInt
+  # tracker for global fee growth
+  feeGrowthGlobal0X128: BigInt!
+  # tracker for global fee growth
+  feeGrowthGlobal1X128: BigInt!
+  # tvl derived in USD at end of period
+  tvlUSD: BigDecimal!
+  # volume in token0
+  volumeToken0: BigDecimal!
+  # volume in token1
+  volumeToken1: BigDecimal!
+  # volume in USD
+  volumeUSD: BigDecimal!
+  # fees in USD
+  feesUSD: BigDecimal!
+  # protocol fees in USD
+  protocolFeesUSD: BigDecimal!
+  # numebr of transactions during period
+  txCount: BigInt!
+  # opening price of token0
+  open0: BigDecimal!
+  # high price of token0
+  high0: BigDecimal!
+  # low price of token0
+  low0: BigDecimal!
+  # close price of token0
+  close0: BigDecimal!
+  # opening price of token0
+  open1: BigDecimal!
+  # high price of token0
+  high1: BigDecimal!
+  # low price of token0
+  low1: BigDecimal!
+  # close price of token0
+  close1: BigDecimal!
 }
 
 # hourly stats tracker for pool
@@ -563,6 +792,218 @@ type PoolHourData @entity {
   low: BigDecimal!
   # close price of token0
   close: BigDecimal!
+}
+
+type PoolMinuteCandleData @entity {
+  # format: <pool address>-<timestamp>
+  id: ID!
+  # unix timestamp for start of hour
+  periodStartUnix: Int!
+  # pointer to pool
+  pool: Pool!
+  # in range liquidity at end of period
+  liquidity: BigInt!
+  # current price tracker at end of period
+  sqrtPrice: BigInt!
+  # price of token0 - derived from sqrtPrice
+  token0Price: BigDecimal!
+  # price of token1 - derived from sqrtPrice
+  token1Price: BigDecimal!
+  # current tick at end of period
+  tick: BigInt
+  # tracker for global fee growth
+  feeGrowthGlobal0X128: BigInt!
+  # tracker for global fee growth
+  feeGrowthGlobal1X128: BigInt!
+  # tvl derived in USD at end of period
+  tvlUSD: BigDecimal!
+  # volume in token0
+  volumeToken0: BigDecimal!
+  # volume in token1
+  volumeToken1: BigDecimal!
+  # volume in USD
+  volumeUSD: BigDecimal!
+  # fees in USD
+  feesUSD: BigDecimal!
+  # protocol fees in USD
+  protocolFeesUSD: BigDecimal!
+  # numebr of transactions during period
+  txCount: BigInt!
+  # opening price of token0
+  open0: BigDecimal!
+  # high price of token0
+  high0: BigDecimal!
+  # low price of token0
+  low0: BigDecimal!
+  # close price of token0
+  close0: BigDecimal!
+  # opening price of token0
+  open1: BigDecimal!
+  # high price of token0
+  high1: BigDecimal!
+  # low price of token0
+  low1: BigDecimal!
+  # close price of token0
+  close1: BigDecimal!
+}
+
+type Pool5MinuteCandleData @entity {
+  # format: <pool address>-<timestamp>
+  id: ID!
+  # unix timestamp for start of hour
+  periodStartUnix: Int!
+  # pointer to pool
+  pool: Pool!
+  # in range liquidity at end of period
+  liquidity: BigInt!
+  # current price tracker at end of period
+  sqrtPrice: BigInt!
+  # price of token0 - derived from sqrtPrice
+  token0Price: BigDecimal!
+  # price of token1 - derived from sqrtPrice
+  token1Price: BigDecimal!
+  # current tick at end of period
+  tick: BigInt
+  # tracker for global fee growth
+  feeGrowthGlobal0X128: BigInt!
+  # tracker for global fee growth
+  feeGrowthGlobal1X128: BigInt!
+  # tvl derived in USD at end of period
+  tvlUSD: BigDecimal!
+  # volume in token0
+  volumeToken0: BigDecimal!
+  # volume in token1
+  volumeToken1: BigDecimal!
+  # volume in USD
+  volumeUSD: BigDecimal!
+  # fees in USD
+  feesUSD: BigDecimal!
+  # protocol fees in USD
+  protocolFeesUSD: BigDecimal!
+  # numebr of transactions during period
+  txCount: BigInt!
+  # opening price of token0
+  open0: BigDecimal!
+  # high price of token0
+  high0: BigDecimal!
+  # low price of token0
+  low0: BigDecimal!
+  # close price of token0
+  close0: BigDecimal!
+  # opening price of token0
+  open1: BigDecimal!
+  # high price of token0
+  high1: BigDecimal!
+  # low price of token0
+  low1: BigDecimal!
+  # close price of token0
+  close1: BigDecimal!
+}
+
+type Pool15MinuteCandleData @entity {
+  # format: <pool address>-<timestamp>
+  id: ID!
+  # unix timestamp for start of hour
+  periodStartUnix: Int!
+  # pointer to pool
+  pool: Pool!
+  # in range liquidity at end of period
+  liquidity: BigInt!
+  # current price tracker at end of period
+  sqrtPrice: BigInt!
+  # price of token0 - derived from sqrtPrice
+  token0Price: BigDecimal!
+  # price of token1 - derived from sqrtPrice
+  token1Price: BigDecimal!
+  # current tick at end of period
+  tick: BigInt
+  # tracker for global fee growth
+  feeGrowthGlobal0X128: BigInt!
+  # tracker for global fee growth
+  feeGrowthGlobal1X128: BigInt!
+  # tvl derived in USD at end of period
+  tvlUSD: BigDecimal!
+  # volume in token0
+  volumeToken0: BigDecimal!
+  # volume in token1
+  volumeToken1: BigDecimal!
+  # volume in USD
+  volumeUSD: BigDecimal!
+  # fees in USD
+  feesUSD: BigDecimal!
+  # protocol fees in USD
+  protocolFeesUSD: BigDecimal!
+  # numebr of transactions during period
+  txCount: BigInt!
+  # opening price of token0
+  open0: BigDecimal!
+  # high price of token0
+  high0: BigDecimal!
+  # low price of token0
+  low0: BigDecimal!
+  # close price of token0
+  close0: BigDecimal!
+  # opening price of token0
+  open1: BigDecimal!
+  # high price of token0
+  high1: BigDecimal!
+  # low price of token0
+  low1: BigDecimal!
+  # close price of token0
+  close1: BigDecimal!
+}
+
+type Pool30MinuteCandleData @entity {
+  # format: <pool address>-<timestamp>
+  id: ID!
+  # unix timestamp for start of hour
+  periodStartUnix: Int!
+  # pointer to pool
+  pool: Pool!
+  # in range liquidity at end of period
+  liquidity: BigInt!
+  # current price tracker at end of period
+  sqrtPrice: BigInt!
+  # price of token0 - derived from sqrtPrice
+  token0Price: BigDecimal!
+  # price of token1 - derived from sqrtPrice
+  token1Price: BigDecimal!
+  # current tick at end of period
+  tick: BigInt
+  # tracker for global fee growth
+  feeGrowthGlobal0X128: BigInt!
+  # tracker for global fee growth
+  feeGrowthGlobal1X128: BigInt!
+  # tvl derived in USD at end of period
+  tvlUSD: BigDecimal!
+  # volume in token0
+  volumeToken0: BigDecimal!
+  # volume in token1
+  volumeToken1: BigDecimal!
+  # volume in USD
+  volumeUSD: BigDecimal!
+  # fees in USD
+  feesUSD: BigDecimal!
+  # protocol fees in USD
+  protocolFeesUSD: BigDecimal!
+  # numebr of transactions during period
+  txCount: BigInt!
+  # opening price of token0
+  open0: BigDecimal!
+  # high price of token0
+  high0: BigDecimal!
+  # low price of token0
+  low0: BigDecimal!
+  # close price of token0
+  close0: BigDecimal!
+  # opening price of token0
+  open1: BigDecimal!
+  # high price of token0
+  high1: BigDecimal!
+  # low price of token0
+  low1: BigDecimal!
+  # close price of token0
+  close1: BigDecimal!
 }
 
 type TickHourData @entity {

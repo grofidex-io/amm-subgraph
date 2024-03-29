@@ -1,20 +1,27 @@
 import { ZERO_BD, ZERO_BI, ONE_BI } from "./constants";
-/* eslint-disable prefer-const */
 import {
   PancakeDayData,
   Factory,
   Pool,
   PoolDayData,
+  PoolDayCandleData,
+  PoolWeekCandleData,
+  PoolMinuteCandleData,
+  Pool5MinuteCandleData,
+  Pool15MinuteCandleData,
+  Pool30MinuteCandleData,
+  PoolMonthCandleData,
   Token,
   TokenDayData,
   TokenHourData,
   Bundle,
   PoolHourData,
+  PoolHourCandleData,
   TickDayData,
   Tick,
 } from "../generated/schema";
 import { FACTORY_ADDRESS } from "./constants";
-import { ethereum } from "@graphprotocol/graph-ts";
+import { BigInt, ethereum } from "@graphprotocol/graph-ts";
 
 /**
  * Tracks global aggregate data over daily windows
@@ -39,6 +46,68 @@ export function updatePancakeDayData(event: ethereum.Event): PancakeDayData {
   pancakeDayData.txCount = pancake.txCount;
   pancakeDayData.save();
   return pancakeDayData as PancakeDayData;
+}
+
+export function updatePoolMonthData(event: ethereum.Event): PoolMonthCandleData {
+  let timestamp = event.block.timestamp.toI32();
+  let dayID = timestamp / 86400 / 30;
+  let dayStartTimestamp = dayID * 86400 * 30;
+  // let dayPoolID = event.address.toHexString().concat("-").concat(dayStartTimestamp.toString());
+  let pool = Pool.load(event.address.toHexString());
+  let dayPoolID = pool.token0.concat(pool.token1).concat("-").concat(dayStartTimestamp.toString());
+  let poolDayData = PoolMonthCandleData.load(dayPoolID);
+
+  if (poolDayData === null) {
+    poolDayData = new PoolMonthCandleData(dayPoolID);
+    poolDayData.date = BigInt.fromString(dayStartTimestamp.toString()).toI32();
+    poolDayData.pool = pool.id;
+    // things that dont get initialized always
+    poolDayData.volumeToken0 = ZERO_BD;
+    poolDayData.volumeToken1 = ZERO_BD;
+    poolDayData.volumeUSD = ZERO_BD;
+    poolDayData.feesUSD = ZERO_BD;
+    poolDayData.protocolFeesUSD = ZERO_BD;
+    poolDayData.txCount = ZERO_BI;
+    poolDayData.feeGrowthGlobal0X128 = ZERO_BI;
+    poolDayData.feeGrowthGlobal1X128 = ZERO_BI;
+    poolDayData.open0 = pool.token0Price;
+    poolDayData.high0 = pool.token0Price;
+    poolDayData.low0 = pool.token0Price;
+    poolDayData.close0 = pool.token0Price;
+    poolDayData.open1 = pool.token1Price;
+    poolDayData.high1 = pool.token1Price;
+    poolDayData.low1 = pool.token1Price;
+    poolDayData.close1 = pool.token1Price;
+  }
+
+  if (pool.token0Price.gt(poolDayData.high0)) {
+    poolDayData.high0 = pool.token0Price;
+  }
+  if (pool.token0Price.lt(poolDayData.low0)) {
+    poolDayData.low0 = pool.token0Price;
+  }
+
+  if (pool.token1Price.gt(poolDayData.high1)) {
+    poolDayData.high1 = pool.token1Price;
+  }
+  if (pool.token1Price.lt(poolDayData.low1)) {
+    poolDayData.low1 = pool.token1Price;
+  }
+
+  poolDayData.liquidity = pool.liquidity;
+  poolDayData.sqrtPrice = pool.sqrtPrice;
+  poolDayData.feeGrowthGlobal0X128 = pool.feeGrowthGlobal0X128;
+  poolDayData.feeGrowthGlobal1X128 = pool.feeGrowthGlobal1X128;
+  poolDayData.token0Price = pool.token0Price;
+  poolDayData.token1Price = pool.token1Price;
+  poolDayData.tick = pool.tick;
+  poolDayData.tvlUSD = pool.totalValueLockedUSD;
+  poolDayData.txCount = poolDayData.txCount.plus(ONE_BI);
+  poolDayData.close0 = pool.token0Price;
+  poolDayData.close1 = pool.token1Price;
+  poolDayData.save();
+
+  return poolDayData as PoolMonthCandleData;
 }
 
 export function updatePoolDayData(event: ethereum.Event): PoolDayData {
@@ -89,6 +158,128 @@ export function updatePoolDayData(event: ethereum.Event): PoolDayData {
   return poolDayData as PoolDayData;
 }
 
+export function updatePoolDayCandleData(event: ethereum.Event): PoolDayCandleData {
+  let timestamp = event.block.timestamp.toI32();
+  let dayID = timestamp / 86400;
+  let dayStartTimestamp = dayID * 86400;
+  // let dayPoolID = event.address.toHexString().concat("-").concat(dayID.toString());
+  let pool = Pool.load(event.address.toHexString());
+  let dayPoolID = pool.token0.concat(pool.token1).concat("-").concat(dayStartTimestamp.toString());
+  let poolDayData = PoolDayCandleData.load(dayPoolID);
+  if (poolDayData === null) {
+    poolDayData = new PoolDayCandleData(dayPoolID);
+    poolDayData.date = dayStartTimestamp;
+    poolDayData.pool = pool.id;
+    // things that dont get initialized always
+    poolDayData.volumeToken0 = ZERO_BD;
+    poolDayData.volumeToken1 = ZERO_BD;
+    poolDayData.volumeUSD = ZERO_BD;
+    poolDayData.feesUSD = ZERO_BD;
+    poolDayData.protocolFeesUSD = ZERO_BD;
+    poolDayData.txCount = ZERO_BI;
+    poolDayData.feeGrowthGlobal0X128 = ZERO_BI;
+    poolDayData.feeGrowthGlobal1X128 = ZERO_BI;
+    poolDayData.open0 = pool.token0Price;
+    poolDayData.high0 = pool.token0Price;
+    poolDayData.low0 = pool.token0Price;
+    poolDayData.close0 = pool.token0Price;
+    poolDayData.open1 = pool.token1Price;
+    poolDayData.high1 = pool.token1Price;
+    poolDayData.low1 = pool.token1Price;
+    poolDayData.close1 = pool.token1Price;
+  }
+
+  if (pool.token0Price.gt(poolDayData.high0)) {
+    poolDayData.high0 = pool.token0Price;
+  }
+  if (pool.token0Price.lt(poolDayData.low0)) {
+    poolDayData.low0 = pool.token0Price;
+  }
+
+  if (pool.token1Price.gt(poolDayData.high1)) {
+    poolDayData.high1 = pool.token1Price;
+  }
+  if (pool.token1Price.lt(poolDayData.low1)) {
+    poolDayData.low1 = pool.token1Price;
+  }
+
+  poolDayData.liquidity = pool.liquidity;
+  poolDayData.sqrtPrice = pool.sqrtPrice;
+  poolDayData.feeGrowthGlobal0X128 = pool.feeGrowthGlobal0X128;
+  poolDayData.feeGrowthGlobal1X128 = pool.feeGrowthGlobal1X128;
+  poolDayData.token0Price = pool.token0Price;
+  poolDayData.token1Price = pool.token1Price;
+  poolDayData.tick = pool.tick;
+  poolDayData.tvlUSD = pool.totalValueLockedUSD;
+  poolDayData.txCount = poolDayData.txCount.plus(ONE_BI);
+  poolDayData.close0 = pool.token0Price;
+  poolDayData.close1 = pool.token1Price;
+  poolDayData.save();
+
+  return poolDayData as PoolDayCandleData;
+}
+
+export function updatePoolWeekData(event: ethereum.Event): PoolWeekCandleData {
+  let timestamp = event.block.timestamp.toI32();
+  let dayID = timestamp / 86400 / 7;
+  let dayStartTimestamp = dayID * 7 * 86400;
+  // let dayPoolID = event.address.toHexString().concat("-").concat(dayID.toString());
+  let pool = Pool.load(event.address.toHexString());
+  let dayPoolID = pool.token0.concat(pool.token1).concat("-").concat(dayStartTimestamp.toString());
+  let poolDayData = PoolWeekCandleData.load(dayPoolID);
+  if (poolDayData === null) {
+    poolDayData = new PoolWeekCandleData(dayPoolID);
+    poolDayData.date = dayStartTimestamp;
+    poolDayData.pool = pool.id;
+    // things that dont get initialized always
+    poolDayData.volumeToken0 = ZERO_BD;
+    poolDayData.volumeToken1 = ZERO_BD;
+    poolDayData.volumeUSD = ZERO_BD;
+    poolDayData.feesUSD = ZERO_BD;
+    poolDayData.protocolFeesUSD = ZERO_BD;
+    poolDayData.txCount = ZERO_BI;
+    poolDayData.feeGrowthGlobal0X128 = ZERO_BI;
+    poolDayData.feeGrowthGlobal1X128 = ZERO_BI;
+    poolDayData.open0 = pool.token0Price;
+    poolDayData.high0 = pool.token0Price;
+    poolDayData.low0 = pool.token0Price;
+    poolDayData.close0 = pool.token0Price;
+    poolDayData.open1 = pool.token1Price;
+    poolDayData.high1 = pool.token1Price;
+    poolDayData.low1 = pool.token1Price;
+    poolDayData.close1 = pool.token1Price;
+  }
+
+  if (pool.token0Price.gt(poolDayData.high0)) {
+    poolDayData.high0 = pool.token0Price;
+  }
+  if (pool.token0Price.lt(poolDayData.low0)) {
+    poolDayData.low0 = pool.token0Price;
+  }
+
+  if (pool.token1Price.gt(poolDayData.high1)) {
+    poolDayData.high1 = pool.token1Price;
+  }
+  if (pool.token1Price.lt(poolDayData.low1)) {
+    poolDayData.low1 = pool.token1Price;
+  }
+
+  poolDayData.liquidity = pool.liquidity;
+  poolDayData.sqrtPrice = pool.sqrtPrice;
+  poolDayData.feeGrowthGlobal0X128 = pool.feeGrowthGlobal0X128;
+  poolDayData.feeGrowthGlobal1X128 = pool.feeGrowthGlobal1X128;
+  poolDayData.token0Price = pool.token0Price;
+  poolDayData.token1Price = pool.token1Price;
+  poolDayData.tick = pool.tick;
+  poolDayData.tvlUSD = pool.totalValueLockedUSD;
+  poolDayData.txCount = poolDayData.txCount.plus(ONE_BI);
+  poolDayData.close0 = pool.token0Price;
+  poolDayData.close1 = pool.token1Price;
+  poolDayData.save();
+
+  return poolDayData as PoolWeekCandleData;
+}
+
 export function updatePoolHourData(event: ethereum.Event): PoolHourData {
   let timestamp = event.block.timestamp.toI32();
   let hourIndex = timestamp / 3600; // get unique hour within unix history
@@ -136,6 +327,316 @@ export function updatePoolHourData(event: ethereum.Event): PoolHourData {
 
   // test
   return poolHourData as PoolHourData;
+}
+
+export function updatePoolHourCandleData(event: ethereum.Event): PoolHourCandleData {
+  let timestamp = event.block.timestamp.toI32();
+  let hourIndex = timestamp / 3600; // get unique hour within unix history
+  let hourStartUnix = hourIndex * 3600; // want the rounded effect
+  // let hourPoolID = event.address.toHexString().concat("-").concat(hourIndex.toString());
+  let pool = Pool.load(event.address.toHexString());
+  let hourPoolID = pool.token0.concat(pool.token1).concat("-").concat(hourIndex.toString());
+  let poolHourData = PoolHourCandleData.load(hourPoolID);
+  if (poolHourData === null) {
+    poolHourData = new PoolHourCandleData(hourPoolID);
+    poolHourData.periodStartUnix = hourStartUnix;
+    poolHourData.pool = pool.id;
+    // things that dont get initialized always
+    poolHourData.volumeToken0 = ZERO_BD;
+    poolHourData.volumeToken1 = ZERO_BD;
+    poolHourData.volumeUSD = ZERO_BD;
+    poolHourData.txCount = ZERO_BI;
+    poolHourData.feesUSD = ZERO_BD;
+    poolHourData.protocolFeesUSD = ZERO_BD;
+    poolHourData.feeGrowthGlobal0X128 = ZERO_BI;
+    poolHourData.feeGrowthGlobal1X128 = ZERO_BI;
+    poolHourData.open0 = pool.token0Price;
+    poolHourData.high0 = pool.token0Price;
+    poolHourData.low0 = pool.token0Price;
+    poolHourData.close0 = pool.token0Price;
+    poolHourData.open1 = pool.token1Price;
+    poolHourData.high1 = pool.token1Price;
+    poolHourData.low1 = pool.token1Price;
+    poolHourData.close1 = pool.token1Price;
+  }
+
+  if (pool.token0Price.gt(poolHourData.high0)) {
+    poolHourData.high0 = pool.token0Price;
+  }
+  if (pool.token0Price.lt(poolHourData.low0)) {
+    poolHourData.low0 = pool.token0Price;
+  }
+
+  if (pool.token1Price.gt(poolHourData.high1)) {
+    poolHourData.high1 = pool.token1Price;
+  }
+  if (pool.token1Price.lt(poolHourData.low1)) {
+    poolHourData.low1 = pool.token1Price;
+  }
+
+  poolHourData.liquidity = pool.liquidity;
+  poolHourData.sqrtPrice = pool.sqrtPrice;
+  poolHourData.token0Price = pool.token0Price;
+  poolHourData.token1Price = pool.token1Price;
+  poolHourData.feeGrowthGlobal0X128 = pool.feeGrowthGlobal0X128;
+  poolHourData.feeGrowthGlobal1X128 = pool.feeGrowthGlobal1X128;
+  poolHourData.close0 = pool.token0Price;
+  poolHourData.close1 = pool.token1Price;
+  poolHourData.tick = pool.tick;
+  poolHourData.tvlUSD = pool.totalValueLockedUSD;
+  poolHourData.txCount = poolHourData.txCount.plus(ONE_BI);
+  poolHourData.save();
+
+  // test
+  return poolHourData as PoolHourCandleData;
+}
+
+export function updatePoolMinuteData(event: ethereum.Event): PoolMinuteCandleData {
+  let timestamp = event.block.timestamp.toI32();
+  let hourIndex = timestamp / 60; // get unique hour within unix history
+  let hourStartUnix = hourIndex * 60; // want the rounded effect
+  // let hourPoolID = event.address.toHexString().concat("-").concat(hourIndex.toString());
+  let pool = Pool.load(event.address.toHexString());
+  let hourPoolID = pool.token0.concat(pool.token1).concat("-").concat(hourIndex.toString());
+  let poolHourData = PoolMinuteCandleData.load(hourPoolID);
+  if (poolHourData === null) {
+    poolHourData = new PoolMinuteCandleData(hourPoolID);
+    poolHourData.periodStartUnix = hourStartUnix;
+    poolHourData.pool = pool.id;
+    // things that dont get initialized always
+    poolHourData.volumeToken0 = ZERO_BD;
+    poolHourData.volumeToken1 = ZERO_BD;
+    poolHourData.volumeUSD = ZERO_BD;
+    poolHourData.txCount = ZERO_BI;
+    poolHourData.feesUSD = ZERO_BD;
+    poolHourData.protocolFeesUSD = ZERO_BD;
+    poolHourData.feeGrowthGlobal0X128 = ZERO_BI;
+    poolHourData.feeGrowthGlobal1X128 = ZERO_BI;
+    poolHourData.open0 = pool.token0Price;
+    poolHourData.high0 = pool.token0Price;
+    poolHourData.low0 = pool.token0Price;
+    poolHourData.close0 = pool.token0Price;
+    poolHourData.open1 = pool.token1Price;
+    poolHourData.high1 = pool.token1Price;
+    poolHourData.low1 = pool.token1Price;
+    poolHourData.close1 = pool.token1Price;
+  }
+
+  if (pool.token0Price.gt(poolHourData.high0)) {
+    poolHourData.high0 = pool.token0Price;
+  }
+  if (pool.token0Price.lt(poolHourData.low0)) {
+    poolHourData.low0 = pool.token0Price;
+  }
+
+  if (pool.token1Price.gt(poolHourData.high1)) {
+    poolHourData.high1 = pool.token1Price;
+  }
+  if (pool.token1Price.lt(poolHourData.low1)) {
+    poolHourData.low1 = pool.token1Price;
+  }
+
+  poolHourData.liquidity = pool.liquidity;
+  poolHourData.sqrtPrice = pool.sqrtPrice;
+  poolHourData.token0Price = pool.token0Price;
+  poolHourData.token1Price = pool.token1Price;
+  poolHourData.feeGrowthGlobal0X128 = pool.feeGrowthGlobal0X128;
+  poolHourData.feeGrowthGlobal1X128 = pool.feeGrowthGlobal1X128;
+  poolHourData.close0 = pool.token0Price;
+  poolHourData.close1 = pool.token1Price;
+  poolHourData.tick = pool.tick;
+  poolHourData.tvlUSD = pool.totalValueLockedUSD;
+  poolHourData.txCount = poolHourData.txCount.plus(ONE_BI);
+  poolHourData.save();
+
+  // test
+  return poolHourData as PoolMinuteCandleData;
+}
+
+export function updatePool5MinuteData(event: ethereum.Event): Pool5MinuteCandleData {
+  let timestamp = event.block.timestamp.toI32();
+  let hourIndex = timestamp / 60 / 5; // get unique hour within unix history
+  let hourStartUnix = hourIndex * 60 * 5; // want the rounded effect
+  // let hourPoolID = event.address.toHexString().concat("-").concat(hourIndex.toString());
+  let pool = Pool.load(event.address.toHexString());
+  let hourPoolID = pool.token0.concat(pool.token1).concat("-").concat(hourIndex.toString());
+  let poolHourData = Pool5MinuteCandleData.load(hourPoolID);
+  if (poolHourData === null) {
+    poolHourData = new Pool5MinuteCandleData(hourPoolID);
+    poolHourData.periodStartUnix = hourStartUnix;
+    poolHourData.pool = pool.id;
+    // things that dont get initialized always
+    poolHourData.volumeToken0 = ZERO_BD;
+    poolHourData.volumeToken1 = ZERO_BD;
+    poolHourData.volumeUSD = ZERO_BD;
+    poolHourData.txCount = ZERO_BI;
+    poolHourData.feesUSD = ZERO_BD;
+    poolHourData.protocolFeesUSD = ZERO_BD;
+    poolHourData.feeGrowthGlobal0X128 = ZERO_BI;
+    poolHourData.feeGrowthGlobal1X128 = ZERO_BI;
+    poolHourData.open0 = pool.token0Price;
+    poolHourData.high0 = pool.token0Price;
+    poolHourData.low0 = pool.token0Price;
+    poolHourData.close0 = pool.token0Price;
+    poolHourData.open1 = pool.token1Price;
+    poolHourData.high1 = pool.token1Price;
+    poolHourData.low1 = pool.token1Price;
+    poolHourData.close1 = pool.token1Price;
+  }
+
+  if (pool.token0Price.gt(poolHourData.high0)) {
+    poolHourData.high0 = pool.token0Price;
+  }
+  if (pool.token0Price.lt(poolHourData.low0)) {
+    poolHourData.low0 = pool.token0Price;
+  }
+
+  if (pool.token1Price.gt(poolHourData.high1)) {
+    poolHourData.high1 = pool.token1Price;
+  }
+  if (pool.token1Price.lt(poolHourData.low1)) {
+    poolHourData.low1 = pool.token1Price;
+  }
+
+  poolHourData.liquidity = pool.liquidity;
+  poolHourData.sqrtPrice = pool.sqrtPrice;
+  poolHourData.token0Price = pool.token0Price;
+  poolHourData.token1Price = pool.token1Price;
+  poolHourData.feeGrowthGlobal0X128 = pool.feeGrowthGlobal0X128;
+  poolHourData.feeGrowthGlobal1X128 = pool.feeGrowthGlobal1X128;
+  poolHourData.close0 = pool.token0Price;
+  poolHourData.close1 = pool.token1Price;
+  poolHourData.tick = pool.tick;
+  poolHourData.tvlUSD = pool.totalValueLockedUSD;
+  poolHourData.txCount = poolHourData.txCount.plus(ONE_BI);
+  poolHourData.save();
+
+  // test
+  return poolHourData as Pool5MinuteCandleData;
+}
+
+export function updatePool15MinuteData(event: ethereum.Event): Pool15MinuteCandleData {
+  let timestamp = event.block.timestamp.toI32();
+  let hourIndex = timestamp / 15 / 60; // get unique hour within unix history
+  let hourStartUnix = hourIndex * 15 * 60; // want the rounded effect
+  // let hourPoolID = event.address.toHexString().concat("-").concat(hourIndex.toString());
+  let pool = Pool.load(event.address.toHexString());
+  let hourPoolID = pool.token0.concat(pool.token1).concat("-").concat(hourIndex.toString());
+  let poolHourData = Pool15MinuteCandleData.load(hourPoolID);
+  if (poolHourData === null) {
+    poolHourData = new Pool15MinuteCandleData(hourPoolID);
+    poolHourData.periodStartUnix = hourStartUnix;
+    poolHourData.pool = pool.id;
+    // things that dont get initialized always
+    poolHourData.volumeToken0 = ZERO_BD;
+    poolHourData.volumeToken1 = ZERO_BD;
+    poolHourData.volumeUSD = ZERO_BD;
+    poolHourData.txCount = ZERO_BI;
+    poolHourData.feesUSD = ZERO_BD;
+    poolHourData.protocolFeesUSD = ZERO_BD;
+    poolHourData.feeGrowthGlobal0X128 = ZERO_BI;
+    poolHourData.feeGrowthGlobal1X128 = ZERO_BI;
+    poolHourData.open0 = pool.token0Price;
+    poolHourData.high0 = pool.token0Price;
+    poolHourData.low0 = pool.token0Price;
+    poolHourData.close0 = pool.token0Price;
+    poolHourData.open1 = pool.token1Price;
+    poolHourData.high1 = pool.token1Price;
+    poolHourData.low1 = pool.token1Price;
+    poolHourData.close1 = pool.token1Price;
+  }
+
+  if (pool.token0Price.gt(poolHourData.high0)) {
+    poolHourData.high0 = pool.token0Price;
+  }
+  if (pool.token0Price.lt(poolHourData.low0)) {
+    poolHourData.low0 = pool.token0Price;
+  }
+
+  if (pool.token1Price.gt(poolHourData.high1)) {
+    poolHourData.high1 = pool.token1Price;
+  }
+  if (pool.token1Price.lt(poolHourData.low1)) {
+    poolHourData.low1 = pool.token1Price;
+  }
+
+  poolHourData.liquidity = pool.liquidity;
+  poolHourData.sqrtPrice = pool.sqrtPrice;
+  poolHourData.token0Price = pool.token0Price;
+  poolHourData.token1Price = pool.token1Price;
+  poolHourData.feeGrowthGlobal0X128 = pool.feeGrowthGlobal0X128;
+  poolHourData.feeGrowthGlobal1X128 = pool.feeGrowthGlobal1X128;
+  poolHourData.close0 = pool.token0Price;
+  poolHourData.close1 = pool.token1Price;
+  poolHourData.tick = pool.tick;
+  poolHourData.tvlUSD = pool.totalValueLockedUSD;
+  poolHourData.txCount = poolHourData.txCount.plus(ONE_BI);
+  poolHourData.save();
+
+  // test
+  return poolHourData as Pool15MinuteCandleData;
+}
+
+export function updatePool30MinuteData(event: ethereum.Event): Pool30MinuteCandleData {
+  let timestamp = event.block.timestamp.toI32();
+  let hourIndex = timestamp / 30 / 60; // get unique hour within unix history
+  let hourStartUnix = hourIndex * 30 * 60; // want the rounded effect
+  // let hourPoolID = event.address.toHexString().concat("-").concat(hourIndex.toString());
+  let pool = Pool.load(event.address.toHexString());
+  let hourPoolID = pool.token0.concat(pool.token1).concat("-").concat(hourIndex.toString());
+  let poolHourData = Pool30MinuteCandleData.load(hourPoolID);
+  if (poolHourData === null) {
+    poolHourData = new Pool30MinuteCandleData(hourPoolID);
+    poolHourData.periodStartUnix = hourStartUnix;
+    poolHourData.pool = pool.id;
+    // things that dont get initialized always
+    poolHourData.volumeToken0 = ZERO_BD;
+    poolHourData.volumeToken1 = ZERO_BD;
+    poolHourData.volumeUSD = ZERO_BD;
+    poolHourData.txCount = ZERO_BI;
+    poolHourData.feesUSD = ZERO_BD;
+    poolHourData.protocolFeesUSD = ZERO_BD;
+    poolHourData.feeGrowthGlobal0X128 = ZERO_BI;
+    poolHourData.feeGrowthGlobal1X128 = ZERO_BI;
+    poolHourData.open0 = pool.token0Price;
+    poolHourData.high0 = pool.token0Price;
+    poolHourData.low0 = pool.token0Price;
+    poolHourData.close0 = pool.token1Price;
+    poolHourData.open1 = pool.token1Price;
+    poolHourData.high1 = pool.token1Price;
+    poolHourData.low1 = pool.token1Price;
+    poolHourData.close1 = pool.token1Price;
+  }
+
+  if (pool.token0Price.gt(poolHourData.high0)) {
+    poolHourData.high0 = pool.token0Price;
+  }
+  if (pool.token0Price.lt(poolHourData.low0)) {
+    poolHourData.low0 = pool.token0Price;
+  }
+
+  if (pool.token1Price.gt(poolHourData.high1)) {
+    poolHourData.high1 = pool.token1Price;
+  }
+  if (pool.token1Price.lt(poolHourData.low1)) {
+    poolHourData.low1 = pool.token1Price;
+  }
+
+  poolHourData.liquidity = pool.liquidity;
+  poolHourData.sqrtPrice = pool.sqrtPrice;
+  poolHourData.token0Price = pool.token0Price;
+  poolHourData.token1Price = pool.token1Price;
+  poolHourData.feeGrowthGlobal0X128 = pool.feeGrowthGlobal0X128;
+  poolHourData.feeGrowthGlobal1X128 = pool.feeGrowthGlobal1X128;
+  poolHourData.close0 = pool.token0Price;
+  poolHourData.close1 = pool.token1Price;
+  poolHourData.tick = pool.tick;
+  poolHourData.tvlUSD = pool.totalValueLockedUSD;
+  poolHourData.txCount = poolHourData.txCount.plus(ONE_BI);
+  poolHourData.save();
+
+  // test
+  return poolHourData as Pool30MinuteCandleData;
 }
 
 export function updateTokenDayData(token: Token, event: ethereum.Event): TokenDayData {
