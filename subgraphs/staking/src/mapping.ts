@@ -9,6 +9,13 @@ export function handleBurnNFT(event: BurnNFT): void {
   }
   token.owner = "0x0000000000000000000000000000000000000000";
   token.save();
+
+  let unstake = UnStaked.load(event.params.tokenId.toString());
+  if (unstake === null) {
+    unstake = new UnStaked(event.params.tokenId.toString());
+  }
+  unstake.user = "0x0000000000000000000000000000000000000000";
+  unstake.save();
 }
 
 export function handleClaimReward(event: ClaimReward): void {
@@ -104,6 +111,5 @@ export function handleWithdraw(event: Withdraw): void {
     unstake = new UnStaked(event.params.tokenId.toString());
   }
   unstake.unStakeAmount = BigInt.fromI32(0);
-  unstake.user = "0x0000000000000000000000000000000000000000";
   unstake.save();
 }
