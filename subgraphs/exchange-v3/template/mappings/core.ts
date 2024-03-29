@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable prefer-const */
-import { Bundle, Burn, Factory, Mint, Pool, Swap, Tick, Token, Collect } from "../generated/schema";
+import { Bundle, Burn, Factory, Mint, Pool, Swap, Tick, Token, Collect, PoolWeekCandleData } from "../generated/schema";
 import { Pool as PoolABI } from "../generated/Factory/Pool";
 import { BigDecimal, BigInt, ethereum } from "@graphprotocol/graph-ts";
 import {
@@ -527,6 +527,14 @@ export function handleSwap(event: SwapEvent): void {
   token1HourData.save();
   token0.save();
   token1.save();
+  pool15MinuteData.save();
+  poolMinuteData.save();
+  pool5MinuteData.save();
+  pool30MinuteData.save();
+  poolHourCandle.save();
+  poolDayCandle.save();
+  poolWeekData.save();
+  poolMonthData.save();
 
   // Update inner vars of current or crossed ticks
   let newTick = pool.tick!;
