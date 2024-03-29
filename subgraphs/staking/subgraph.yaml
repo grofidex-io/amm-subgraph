@@ -1,0 +1,41 @@
+specVersion: 0.0.2
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: Staking
+    network: testnet
+    source:
+      address: "0x83f0B3aBAe8513dD8f30B4575fA9492cf57b84d6"
+      abi: Staking
+      startBlock: 19944947
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.2
+      language: wasm/assemblyscript
+      entities:
+        - Approval
+        - ApprovalForAll
+        - BurnNFT
+        - ClaimReward
+        - Stake
+        - Transfer
+        - UnStake
+        - Withdraw
+      abis:
+        - name: Staking
+          file: ./abis/Staking.json
+      eventHandlers:
+        - event: BurnNFT(indexed uint256)
+          handler: handleBurnNFT
+        - event: ClaimReward(indexed uint256,indexed address,indexed uint256,uint256)
+          handler: handleClaimReward
+        - event: Stake(indexed uint256,indexed address,indexed uint256,uint256)
+          handler: handleStake
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+        - event: UnStake(indexed uint256,indexed address,indexed uint256,uint256)
+          handler: handleUnStake
+        - event: Withdraw(indexed uint256,indexed address,uint256)
+          handler: handleWithdraw
+      file: ./src/mapping.ts

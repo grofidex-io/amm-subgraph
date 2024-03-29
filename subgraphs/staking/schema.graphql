@@ -1,0 +1,24 @@
+type User @entity {
+  id: ID!
+  staked: [Staked!]! @derivedFrom(field: "user")
+  unStake: [UnStaked!]! @derivedFrom(field: "user")
+}
+
+type Token @entity {
+  id: ID!
+  owner: String!
+}
+
+type Staked @entity {
+  id: ID! #tokenId
+  stakedAmount: BigInt!
+  timestamp: Int!
+  user: User!
+}
+
+type UnStaked @entity {
+  id: ID! #tokenId
+  unStakeAmount: BigInt!
+  timestamp: Int!
+  user: User!
+}
