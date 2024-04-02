@@ -11,14 +11,14 @@ type Token @entity {
 
 type Staked @entity {
   id: ID! #tokenId
-  stakedAmount: BigInt!
+  amount: BigInt!
   timestamp: Int!
   user: User!
 }
 
 type UnStaked @entity {
   id: ID! #tokenId
-  unStakeAmount: BigInt!
+  amount: BigInt!
   timestamp: Int!
   user: User!
 }
