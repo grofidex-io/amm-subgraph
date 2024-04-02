@@ -49,7 +49,7 @@ export function handleStake(event: Stake): void {
   if (stake === null) {
     stake = new Staked(event.params.tokenId.toString());
   }
-  stake.stakedAmount = event.params.amount;
+  stake.amount = event.params.amount;
   stake.timestamp = event.block.timestamp.toI32();
   stake.user = event.transaction.from.toHex();
   stake.save();
@@ -92,14 +92,14 @@ export function handleUnStake(event: UnStake): void {
   if (stake === null) {
     stake = new Staked(event.params.tokenId.toString());
   }
-  stake.stakedAmount = BigInt.fromI32(0);
+  stake.amount = BigInt.fromI32(0);
   stake.user = "0x0000000000000000000000000000000000000000";
   stake.save();
   let unstake = UnStaked.load(event.params.tokenId.toString());
   if (unstake === null) {
     unstake = new UnStaked(event.params.tokenId.toString());
   }
-  unstake.unStakeAmount = event.params.amount;
+  unstake.amount = event.params.amount;
   unstake.timestamp = event.block.timestamp.toI32();
   unstake.user = event.transaction.from.toHex();
   unstake.save();
@@ -110,6 +110,6 @@ export function handleWithdraw(event: Withdraw): void {
   if (unstake === null) {
     unstake = new UnStaked(event.params.tokenId.toString());
   }
-  unstake.unStakeAmount = BigInt.fromI32(0);
+  unstake.amount = BigInt.fromI32(0);
   unstake.save();
 }
