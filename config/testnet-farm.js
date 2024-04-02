@@ -19,7 +19,7 @@ module.exports = {
   wNativeAddress: NATIVE_ADDRESS,
   v3: {
     // WBNB-USDT 500
-    wNativeStablePoolAddress: "0xeaf3feabf19db01e11f36f5e9eeae1d41ee482c1",
+    wNativeStablePoolAddress: "0xbbd2572cf5087a8cb2df152fe96fa870a23246f3",
     stableIsToken0: false,
     factoryAddress: "0xe33d310359dc645cafae5bd263499302ee66a740",
     startBlock: 20239918,
