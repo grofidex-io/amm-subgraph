@@ -4,6 +4,11 @@ type User @entity {
   unStake: [UnStaked!]! @derivedFrom(field: "user")
 }
 
+type Contract @entity {
+  id: ID!
+  tokenId: BigInt!
+}
+
 type Token @entity {
   id: ID!
   owner: String!
