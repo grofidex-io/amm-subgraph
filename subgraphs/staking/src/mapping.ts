@@ -1,6 +1,6 @@
 import { BigInt, log } from "@graphprotocol/graph-ts";
 import { BurnNFT, ClaimReward, Stake, Transfer, UnStake, Withdraw } from "../generated/Staking/Staking";
-import { Staked, Token, UnStaked, User } from "../generated/schema";
+import { Contract, Staked, Token, UnStaked, User } from "../generated/schema";
 
 export function handleBurnNFT(event: BurnNFT): void {
   let token = Token.load(event.params.tokenId.toString());
@@ -16,6 +16,13 @@ export function handleBurnNFT(event: BurnNFT): void {
   }
   unstake.user = "0x0000000000000000000000000000000000000000";
   unstake.save();
+
+  let contract = Contract.load(event.params.contractStake.toHex());
+  if (contract === null) {
+    contract = new Contract(event.params.contractStake.toHex());
+  }
+  contract.tokenId = BigInt.fromI32(0);
+  contract.save();
 }
 
 export function handleClaimReward(event: ClaimReward): void {
@@ -53,6 +60,13 @@ export function handleStake(event: Stake): void {
   stake.timestamp = event.block.timestamp.toI32();
   stake.user = event.transaction.from.toHex();
   stake.save();
+
+  let contract = Contract.load(event.params.contractStake.toHex());
+  if (contract === null) {
+    contract = new Contract(event.params.contractStake.toHex());
+  }
+  contract.tokenId = event.params.tokenId;
+  contract.save();
 }
 
 export function handleTransfer(event: Transfer): void {
