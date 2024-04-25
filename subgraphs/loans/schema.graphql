@@ -1,10 +1,11 @@
 type Loan @entity {
   id: ID! #tokenId
   borrowAmount: BigInt!
-  repayAmount: BigInt!
   borrowTime: Int!
   repayTime: Int!
   user: User!
+  loanPackage: LoanPackage
+  stakeId: BigInt!
 }
 
 type User @entity {
