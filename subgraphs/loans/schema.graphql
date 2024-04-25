@@ -1,0 +1,21 @@
+type Loan @entity {
+  id: ID! #tokenId
+  borrowAmount: BigInt!
+  repayAmount: BigInt!
+  borrowTime: Int!
+  repayTime: Int!
+  user: User!
+}
+
+type User @entity {
+  id: ID!
+  loans: [Loan!]! @derivedFrom(field: "user")
+}
+
+type LoanPackage @entity {
+  id: ID! #Id
+  period: Int!
+  maxBorrowRatio: BigDecimal!
+  annualRate: BigDecimal!
+  minBorrow: BigInt!
+}
