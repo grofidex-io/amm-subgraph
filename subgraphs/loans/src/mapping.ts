@@ -57,6 +57,12 @@ export function handleConfigPackage(event: ConfigPackage): void {
   packageLoan.annualRate = convertTokenToDecimal(event.params.annualRate);
   packageLoan.maxBorrowRatio = convertTokenToDecimal(event.params.maxBorrowRatio);
   packageLoan.minBorrow = event.params.minBorrow;
+  if (event.params.period.toI32() >= 86400) {
+    packageLoan.symbolTime = "day"
+  } else if (event.params.period.toI32() >= 3600) {
+    packageLoan.symbolTime = "hour"
+  } else packageLoan.symbolTime = "minute"
+  
   packageLoan.save();
 }
 
