@@ -6,6 +6,7 @@ type Loan @entity {
   user: User!
   loanPackage: LoanPackage
   stakeId: BigInt!
+  payOffTime: Int!
 }
 
 type User @entity {

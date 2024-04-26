@@ -45,6 +45,7 @@ export function handleBorrow(event: Borrow): void {
   }
   loan.stakeId = event.params.stakeId;
   loan.user = event.transaction.from.toHex();
+  loan.payOffTime = 0;
   loan.save();
 }
 
@@ -58,20 +59,27 @@ export function handleConfigPackage(event: ConfigPackage): void {
   packageLoan.maxBorrowRatio = convertTokenToDecimal(event.params.maxBorrowRatio);
   packageLoan.minBorrow = event.params.minBorrow;
   if (event.params.period.toI32() >= 86400) {
-    let time = event.params.period.div(BigInt.fromI32(86400))
+    let time = event.params.period.div(BigInt.fromI32(86400));
     packageLoan.symbolTime = time.toString() + " days";
   } else if (event.params.period.toI32() >= 3600) {
-    let time = event.params.period.div(BigInt.fromI32(3600))
+    let time = event.params.period.div(BigInt.fromI32(3600));
     packageLoan.symbolTime = time.toString() + " hours";
   } else {
-    let time = event.params.period.div(BigInt.fromI32(60))
+    let time = event.params.period.div(BigInt.fromI32(60));
     packageLoan.symbolTime = time.toString() + " minutes";
   }
 
   packageLoan.save();
 }
 
-export function handlePayOff(event: PayOff): void {}
+export function handlePayOff(event: PayOff): void {
+  let loan = Loan.load(event.params.tokenId.toString());
+  if (loan === null) {
+    loan = new Loan(event.params.tokenId.toString());
+  }
+  loan.payOffTime = event.block.timestamp.toI32();
+  loan.save();
+}
 
 export function handleReturnStakingNFT(event: ReturnStakingNFT): void {
   let loan = Loan.load(event.params.tokenId.toString());
