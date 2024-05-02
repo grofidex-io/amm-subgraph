@@ -6,9 +6,9 @@ dataSources:
     name: Staking
     network: testnet
     source:
-      address: "0x6d3214eFc611aaAC0d87f760fFF3fb441dE389D0"
+      address: "0xc855E724bCc748f731E4f7888e78B6DfB455075B"
       abi: Staking
-      startBlock: 21815984
+      startBlock: 20447458
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.2
