@@ -1,20 +1,20 @@
-# U2U Subgraph
+# Grofidex Subgraph
 
-TheGraph exposes a GraphQL endpoint to query the events and entities within the U2U ecosystem.
+TheGraph exposes a GraphQL endpoint to query the events and entities within the ecosystem.
 
 Currently, there are multiple subgraphs, but additional subgraphs can be added to this repository, following the current architecture.
 
 ## Subgraphs
 
-1. **[Blocks] Tracks all blocks on U2U.
+1. **[Blocks] Tracks all blocks.
 
-   - U2U https://subgraph-amm-dev.uniultra.xyz/subgraphs/name/u2u-amm/blocks
+   - U2U https://subgraph-amm-testnet.grofidex.io/subgraphs/name/amm/blocks
 
 2. **MasterChef (v3)**: Tracks data for MasterChefV3.
 
-3. **Exchange (v3)**: Tracks all U2Dex Exchange data with price, volume, liquidity
+3. **Exchange (v3)**: Tracks all Grofidex data with price, volume, liquidity
 
-    - U2U https://subgraph-amm-dev.uniultra.xyz/subgraphs/name/u2u-amm/u2dex-v1
+    - U2U https://subgraph-amm-testnet.grofidex.io/subgraphs/name/amm/grofidex-v1
 
 ## Dependencies
 
