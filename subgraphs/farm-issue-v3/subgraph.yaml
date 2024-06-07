@@ -8,7 +8,7 @@ dataSources:
     name: MasterChefV3
     network: testnet
     source:
-      address: '0xdb4D4246949DA706302dB28656fc7C4Ef5D5f18B'
+      address: "0xdb4D4246949DA706302dB28656fc7C4Ef5D5f18B"
       abi: MasterChefV3
       startBlock: 20379805
     mapping:
