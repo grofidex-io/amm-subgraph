@@ -1,6 +1,6 @@
 import { BigInt, log } from "@graphprotocol/graph-ts";
 import { BurnNFT, ClaimReward, Stake, Transfer, UnStake, Withdraw } from "../generated/Staking/Staking";
-import { Contract, Staked, Token, UnStaked, User } from "../generated/schema";
+import { Contract, Staked, Token, TransactionHistory, UnStaked, User } from "../generated/schema";
 
 export function handleBurnNFT(event: BurnNFT): void {
   let token = Token.load(event.params.tokenId.toString());
@@ -67,6 +67,17 @@ export function handleStake(event: Stake): void {
   }
   contract.tokenId = event.params.tokenId;
   contract.save();
+
+  let historyId = event.transaction.hash.toHex();
+  let history = TransactionHistory.load(historyId);
+  if (history === null) {
+    history = new TransactionHistory(historyId);
+    history.user = user.id;
+    history.amount = event.params.amount;
+    history.timestamp = event.block.timestamp.toI32();
+    history.transactionType = "STAKE";
+    history.save();
+  }
 }
 
 export function handleTransfer(event: Transfer): void {
@@ -106,6 +117,7 @@ export function handleUnStake(event: UnStake): void {
   if (stake === null) {
     stake = new Staked(event.params.tokenId.toString());
   }
+  let user = stake.user;
   stake.amount = BigInt.fromI32(0);
   stake.user = "0x0000000000000000000000000000000000000000";
   stake.save();
@@ -115,8 +127,18 @@ export function handleUnStake(event: UnStake): void {
   }
   unstake.amount = event.params.amount;
   unstake.timestamp = event.block.timestamp.toI32();
-  unstake.user = event.transaction.from.toHex();
+  unstake.user = user;
   unstake.save();
+  let historyId = event.transaction.hash.toHex();
+  let history = TransactionHistory.load(historyId);
+  if (history === null) {
+    history = new TransactionHistory(historyId);
+    history.user = user;
+    history.amount = event.params.amount;
+    history.timestamp = event.block.timestamp.toI32();
+    history.transactionType = "UNSTAKE";
+    history.save();
+  }
 }
 
 export function handleWithdraw(event: Withdraw): void {
@@ -124,6 +146,17 @@ export function handleWithdraw(event: Withdraw): void {
   if (unstake === null) {
     unstake = new UnStaked(event.params.tokenId.toString());
   }
+  let unStakeAmount = unstake.amount;
   unstake.amount = BigInt.fromI32(0);
   unstake.save();
+  let historyId = event.transaction.hash.toHex();
+  let history = TransactionHistory.load(historyId);
+  if (history === null) {
+    history = new TransactionHistory(historyId);
+    history.user = unstake.user;
+    history.amount = unStakeAmount;
+    history.timestamp = event.block.timestamp.toI32();
+    history.transactionType = "WITHDRAW";
+    history.save();
+  }
 }

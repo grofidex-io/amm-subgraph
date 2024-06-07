@@ -27,3 +27,11 @@ type UnStaked @entity {
   timestamp: Int!
   user: User!
 }
+
+type TransactionHistory @entity {
+  id: ID! #tokenId
+  amount: BigInt!
+  timestamp: Int!
+  transactionType: String!
+  user: User!
+}
