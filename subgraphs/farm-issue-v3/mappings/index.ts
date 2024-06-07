@@ -4,7 +4,7 @@ import { Address, BigInt, log } from "@graphprotocol/graph-ts";
 import { Deposit } from "../generated/schema";
 import { getOrCreateUser } from "./utils";
 
-let MASTER_CHEF_V3_ADDRESS = Address.fromString("0x556B9306565093C855AEA9AE92A594704c2Cd59e");
+let MASTER_CHEF_V3_ADDRESS = Address.fromString("0xdb4D4246949DA706302dB28656fc7C4Ef5D5f18B");
 
 // let BI_TWO = BigInt.fromString("2");
 
@@ -15,7 +15,7 @@ export function handleDeposit(event: DepositEvent): void {
   let mChefV3 = MasterChefV3.bind(MASTER_CHEF_V3_ADDRESS);
   let result = mChefV3.try_userPositionInfos(event.params.tokenId);
   if (result.reverted) {
-    log.error("Cannot fetch try_userPositionInfos", []);
+    log.error("Cannot fetch try_userPositionInfosabc", []);
   } else {
     let userPositionInfos = result.value;
     let rewardGrowthInside = userPositionInfos.value4;

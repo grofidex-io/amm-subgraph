@@ -6,12 +6,12 @@
   "author": "PancakeSwap",
   "license": "GPL-3.0-or-later",
   "scripts": {
-    "auth": "graph auth --product hosted-service ''",
-    "codegen:bsc": "graph codegen subgraph-bsc.yaml",
-    "build:bsc": "graph build subgraph-bsc.yaml",
-    "deploy:bsc": "graph deploy --product hosted-service --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ chef-huan/farm-issue-v3-bsc subgraph-bsc.yaml",
-    "codegen:eth": "graph codegen subgraph-eth.yaml",
-    "build:eth": "graph build subgraph-eth.yaml",
-    "deploy:eth": "graph deploy --product hosted-service --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ chef-huan/farm-issue-v3-eth subgraph-eth.yaml"
+    "template": "mustache ../../../config/testnet-farm.js subgraph.template.yaml > subgraph.yaml && mustache ../../../config/testnet-farm.js utils/constants.template.ts > utils/constants.ts && mustache ../../../config/testnet-farm.js utils/pricing.template.ts > utils/pricing.ts",
+    "codegen": "graph codegen subgraph.yaml",
+    "build": "graph build subgraph.yaml",
+    "create-local": "graph create --node http://localhost:8020/ amm/farm subgraph.yaml",
+    "remove-local": "graph remove --node http://localhost:8020/ amm/farm",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 amm/farm subgraph.yaml -l v0.0.1",
+    "deploy-all": "npm run codegen && npm run build && npm run remove-local && npm run create-local && npm run deploy-local"
   }
 }
