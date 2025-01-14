@@ -9,8 +9,9 @@
     "codegen": "graph codegen subgraph.yaml",
     "build": "graph build subgraph.yaml",
     "test": "graph test -r",
-    "create-local": "graph create --node http://localhost:8021/ amm/blocks",
-    "remove-local": "graph remove --node http://localhost:8021/ amm/blocks",
-    "deploy-local": "graph deploy --node http://localhost:8021/ --ipfs http://localhost:5002 amm/blocks subgraph.yaml"
+    "create-local": "graph create --node http://localhost:8020/ amm/blocks",
+    "remove-local": "graph remove --node http://localhost:8020/ amm/blocks",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 amm/blocks subgraph.yaml -l v0.0.1",
+    "deploy-all": "npm run codegen && npm run build && npm run remove-local && npm run create-local && npm run deploy-local"
   }
 }
