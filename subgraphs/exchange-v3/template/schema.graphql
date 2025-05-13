@@ -175,6 +175,15 @@ type Pool @entity {
   swaps: [Swap!]! @derivedFrom(field: "pool")
   collects: [Collect!]! @derivedFrom(field: "pool")
   ticks: [Tick!]! @derivedFrom(field: "pool")
+
+  # map identity
+  poolIdentity: PoolIdentity!
+}
+
+type PoolIdentity @entity {
+  id: ID!
+  visible: Boolean!
+  isOfficialListing: Boolean!
 }
 
 type Tick @entity {
