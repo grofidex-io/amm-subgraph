@@ -11,6 +11,7 @@ import {
   Swap as SwapEvent,
   Collect as CollectEvent,
   CollectProtocol as CollectProtocolEvent,
+  SetFeeProtocol,
 } from "../generated/templates/Pool/Pool";
 import { convertTokenToDecimal, loadTransaction } from "../utils";
 import { FACTORY_ADDRESS, ONE_BI, TWO_BD, ZERO_BD, ZERO_BI } from "../utils/constants";
@@ -564,6 +565,12 @@ export function handleSwap(event: SwapEvent): void {
       loadTickUpdateFeeVarsAndSave(i.toI32(), event);
     }
   }
+}
+
+export function handleSetFeeProtocol(event: SetFeeProtocol): void {
+  let pool = Pool.load(event.address.toHexString());
+  pool.initFeeProtocol = true;
+  pool.save();
 }
 
 export function handleFlash(event: FlashEvent): void {

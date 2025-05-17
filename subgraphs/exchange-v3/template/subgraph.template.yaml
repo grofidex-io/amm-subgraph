@@ -104,3 +104,5 @@ templates:
           handler: handleCollect
         - event: CollectProtocol(indexed address,indexed address,uint128,uint128)
           handler: handleCollectProtocol
+        - event: SetFeeProtocol(uint32,uint32,uint32,uint32)
+          handler: handleSetFeeProtocol

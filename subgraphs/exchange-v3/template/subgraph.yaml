@@ -8,11 +8,11 @@ features:
 dataSources:
   - kind: ethereum/contract
     name: Factory
-    network: testnet
+    network: mainnet
     source:
-      address: "0x2aac369c33edc60ec13249004f7bd25c8d318eff"
+      address: "0xb13b63b880f8c9b39cb68ed3fdfe10f067cf76cb"
       abi: Factory
-      startBlock: 19589488
+      startBlock: 29477014
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -37,11 +37,11 @@ dataSources:
           handler: handlePoolCreated
   - kind: ethereum/contract
     name: NonfungiblePositionManager
-    network: testnet
+    network: mainnet
     source:
-      address: "0xa00eb0afba9b46d5b3119e65f96329f474e5dbee"
+      address: "0xd303a176836a7179d018344396ea05cb94b05769"
       abi: NonfungiblePositionManager
-      startBlock: 19589502
+      startBlock: 29477029
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -71,7 +71,7 @@ dataSources:
 templates:
   - kind: ethereum/contract
     name: Pool
-    network: testnet
+    network: mainnet
     source:
       abi: Pool
     mapping:
@@ -104,3 +104,5 @@ templates:
           handler: handleCollect
         - event: CollectProtocol(indexed address,indexed address,uint128,uint128)
           handler: handleCollectProtocol
+        - event: SetFeeProtocol(uint32,uint32,uint32,uint32)
+          handler: handleSetFeeProtocol

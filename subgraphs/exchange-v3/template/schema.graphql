@@ -175,6 +175,8 @@ type Pool @entity {
   swaps: [Swap!]! @derivedFrom(field: "pool")
   collects: [Collect!]! @derivedFrom(field: "pool")
   ticks: [Tick!]! @derivedFrom(field: "pool")
+
+  initFeeProtocol: Boolean!
 }
 
 type Tick @entity {
