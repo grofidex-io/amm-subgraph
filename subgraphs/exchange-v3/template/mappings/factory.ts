@@ -112,7 +112,7 @@ export function handlePoolCreated(event: PoolCreated): void {
   const token0Priority = getPriority(token0.id);
   const token1Priority = getPriority(token1.id);
 
-  if (token0Priority < token1Priority) {
+  if (token0Priority <= token1Priority) {
     pool.baseToken = token0.id;
     pool.quoteToken = token1.id;
   } else {

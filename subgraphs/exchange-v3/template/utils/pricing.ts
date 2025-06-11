@@ -5,26 +5,26 @@ import { BigDecimal, BigInt } from "@graphprotocol/graph-ts";
 import { exponentToBigDecimal, safeDiv } from "./index";
 
 // prettier-ignore
-const WETH_ADDRESS = "0xa99cf32e9aaa700f9e881ba9bf2c57a211ae94df";
+const WETH_ADDRESS = "0xc5f15624b4256c1206e4bb93f2ccc9163a75b703";
 
 // prettier-ignore
-export const EXPORT_WETH_ADDRESS = "0xa99cf32e9aaa700f9e881ba9bf2c57a211ae94df";
+export const EXPORT_WETH_ADDRESS = "0xc5f15624b4256c1206e4bb93f2ccc9163a75b703";
 
 // prettier-ignore
-export const EXPORT_USDT_ADDRESS = "0x0820957b320e901622385cc6c4fca196b20b939f";
+export const EXPORT_USDT_ADDRESS = "0xdfae88f8610a038afcdf47a5bc77c0963c65087c";
 
 // prettier-ignore
-const USDC_WETH_03_POOL = "0x6fec532983365f33dc70a0499f047f8f2178c671";
+const USDC_WETH_03_POOL = "0x546b56f6a294750ea44d0b58ca2bb0a7201518e6";
 
-const STABLE_IS_TOKEN0 = "true" as string;
+const STABLE_IS_TOKEN0 = "false" as string;
 
 // token where amounts should contribute to tracked volume and liquidity
 // usually tokens that many tokens are paired with s
 // prettier-ignore
-export let WHITELIST_TOKENS: string[] = "0xa99cf32e9aaa700f9e881ba9bf2c57a211ae94df,0x0820957b320e901622385cc6c4fca196b20b939f".split(",");
+export let WHITELIST_TOKENS: string[] = "0xc5f15624b4256c1206e4bb93f2ccc9163a75b703,0x4ebbe24182e9c14e1d2e02ab9459190f39c43b6f,0x73fe4db0779022ff9c0b32ef2644272b32bef5b7,0xdfae88f8610a038afcdf47a5bc77c0963c65087c,0xc845fc63a5a69637ebe0d960fbfa33671a1e21e0,0xcedb8ee7c0e21bdd78f46e334a33ed17189131d5,0x7bd3dc0e0e1e1ccce1657a18cbe32f13f9fc9376,0x94504f356a267f3a128c2e6387281bccdbd821a0,0xa4447a108e92b8c36de0fb310d43f95c54fc81e2,0xf25394ebb6d132d21bce902f759f592954e898cd,0xfd7ea8beabf2999dcf7f97a694b7fda60ac4bf20,0xbeb74c0c2cc994c8fad7ba91fae15b5b748cd707".split(",");
 
 // prettier-ignore
-let STABLE_COINS: string[] = "0x0820957b320e901622385cc6c4fca196b20b939f".split(",");
+let STABLE_COINS: string[] = "0xdfae88f8610a038afcdf47a5bc77c0963c65087c,0x73fe4db0779022ff9c0b32ef2644272b32bef5b7,0xc845fc63a5a69637ebe0d960fbfa33671a1e21e0".split(",");
 
 let MINIMUM_ETH_LOCKED = BigDecimal.fromString("1");
 
