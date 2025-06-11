@@ -109,7 +109,10 @@ export function handlePoolCreated(event: PoolCreated): void {
     token0.whitelistPools = newPools;
   }
 
-  if ((token0.id == EXPORT_WETH_ADDRESS && EXPORT_USDT_ADDRESS == token1.id) || EXPORT_USDT_ADDRESS == token0.id) {
+  if (token0.id == EXPORT_WETH_ADDRESS && EXPORT_USDT_ADDRESS == token1.id) {
+    pool.baseToken = token1.id;
+    pool.quoteToken = token0.id;
+  } else if (token0.id == EXPORT_WETH_ADDRESS || EXPORT_USDT_ADDRESS == token0.id) {
     pool.baseToken = token1.id;
     pool.quoteToken = token0.id;
   } else {
