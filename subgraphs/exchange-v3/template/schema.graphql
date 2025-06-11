@@ -93,6 +93,10 @@ type Pool @entity {
   token0: Token!
   # token1
   token1: Token!
+  # baseToken
+  baseToken: Token!
+  # quoteToken
+  quoteToken: Token!
   # fee amount
   feeTier: BigInt!
   # in range liquidity

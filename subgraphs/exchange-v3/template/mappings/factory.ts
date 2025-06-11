@@ -1,4 +1,4 @@
-import { WHITELIST_TOKENS } from "./../utils/pricing";
+import { WHITELIST_TOKENS, EXPORT_USDT_ADDRESS, EXPORT_WETH_ADDRESS } from "./../utils/pricing";
 /* eslint-disable prefer-const */
 import { FACTORY_ADDRESS, ZERO_BI, ONE_BI, ZERO_BD, ADDRESS_ZERO } from "./../utils/constants";
 import { Factory } from "../generated/schema";
@@ -109,8 +109,18 @@ export function handlePoolCreated(event: PoolCreated): void {
     token0.whitelistPools = newPools;
   }
 
-  let feeTier = BigInt.fromI32(event.params.fee);
+  const token0Priority = getPriority(token0.id);
+  const token1Priority = getPriority(token1.id);
 
+  if (token0Priority < token1Priority) {
+    pool.baseToken = token0.id;
+    pool.quoteToken = token1.id;
+  } else {
+    pool.baseToken = token1.id;
+    pool.quoteToken = token0.id;
+  }
+
+  let feeTier = BigInt.fromI32(event.params.fee);
   pool.token0 = token0.id;
   pool.token1 = token1.id;
   pool.feeTier = feeTier;
@@ -152,6 +162,12 @@ export function handlePoolCreated(event: PoolCreated): void {
   token1.save();
   factory.save();
 }
+
+const getPriority = (tokenId: string): number => {
+  if (tokenId == EXPORT_USDT_ADDRESS) return 3;
+  if (tokenId == EXPORT_WETH_ADDRESS) return 2;
+  return 1; // Other tokens
+};
 
 function feeTierToProtoclFeeDefault(feeTier: BigInt): BigInt {
   if (feeTier.equals(BigInt.fromI32(10000))) {

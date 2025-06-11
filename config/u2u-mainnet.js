@@ -9,6 +9,7 @@ const USDT = '0x0820957b320e901622385cc6c4fca196b20b939f'
 module.exports = {
   network: "mainnet",
   wNativeAddress: NATIVE_ADDRESS,
+  usdtAddress: USDT,
   v3: {
     // WBNB-USDT 500
     wNativeStablePoolAddress: "0x6fec532983365f33dc70a0499f047f8f2178c671",
