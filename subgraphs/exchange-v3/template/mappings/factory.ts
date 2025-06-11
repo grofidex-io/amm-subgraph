@@ -1,4 +1,4 @@
-import { WHITELIST_TOKENS } from "./../utils/pricing";
+import { WHITELIST_TOKENS, EXPORT_STABLE_COINS, EXPORT_WETH_ADDRESS } from "./../utils/pricing";
 /* eslint-disable prefer-const */
 import { FACTORY_ADDRESS, ZERO_BI, ONE_BI, ZERO_BD, ADDRESS_ZERO } from "./../utils/constants";
 import { Factory } from "../generated/schema";
@@ -108,9 +108,16 @@ export function handlePoolCreated(event: PoolCreated): void {
     newPools.push(pool.id);
     token0.whitelistPools = newPools;
   }
+  
+  if (token0.id == EXPORT_WETH_ADDRESS || EXPORT_STABLE_COINS.includes(token0.id)) {
+    pool.baseToken = token1.id;
+    pool.quoteToken = token0.id;
+  } else {
+    pool.baseToken = token0.id;
+    pool.quoteToken = token1.id;
+  }
 
   let feeTier = BigInt.fromI32(event.params.fee);
-
   pool.token0 = token0.id;
   pool.token1 = token1.id;
   pool.feeTier = feeTier;

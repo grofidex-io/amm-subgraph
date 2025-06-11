@@ -6,6 +6,13 @@ import { exponentToBigDecimal, safeDiv } from "./index";
 
 // prettier-ignore
 const WETH_ADDRESS = "{{ wNativeAddress }}";
+
+// prettier-ignore
+export const EXPORT_WETH_ADDRESS = "{{ wNativeAddress }}";
+
+// prettier-ignore
+export let EXPORT_STABLE_COINS: string[] = "{{ v3.stableCoins }}".split(",");
+
 // prettier-ignore
 const USDC_WETH_03_POOL = "{{ v3.wNativeStablePoolAddress }}";
 

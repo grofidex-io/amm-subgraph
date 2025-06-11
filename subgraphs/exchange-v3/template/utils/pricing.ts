@@ -6,6 +6,13 @@ import { exponentToBigDecimal, safeDiv } from "./index";
 
 // prettier-ignore
 const WETH_ADDRESS = "0xa99cf32e9aaa700f9e881ba9bf2c57a211ae94df";
+
+// prettier-ignore
+export const EXPORT_WETH_ADDRESS = "0xa99cf32e9aaa700f9e881ba9bf2c57a211ae94df";
+
+// prettier-ignore
+export let EXPORT_STABLE_COINS: string[] = "0x0820957b320e901622385cc6c4fca196b20b939f".split(",");
+
 // prettier-ignore
 const USDC_WETH_03_POOL = "0x6fec532983365f33dc70a0499f047f8f2178c671";
 
