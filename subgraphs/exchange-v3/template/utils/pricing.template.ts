@@ -11,7 +11,7 @@ const WETH_ADDRESS = "{{ wNativeAddress }}";
 export const EXPORT_WETH_ADDRESS = "{{ wNativeAddress }}";
 
 // prettier-ignore
-export let EXPORT_STABLE_COINS: string[] = "{{ v3.stableCoins }}".split(",");
+export const EXPORT_USDT_ADDRESS = "{{ usdtAddress }}";
 
 // prettier-ignore
 const USDC_WETH_03_POOL = "{{ v3.wNativeStablePoolAddress }}";
