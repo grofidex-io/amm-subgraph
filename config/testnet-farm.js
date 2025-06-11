@@ -17,6 +17,7 @@ const WADA_ADDRESS = '0xbeb74c0c2cc994c8fad7ba91fae15b5b748cd707'
 module.exports = {
   network: "testnet",
   wNativeAddress: NATIVE_ADDRESS,
+  usdtAddress: USDT_ADDRESS,
   v3: {
     // WBNB-USDT 500
     wNativeStablePoolAddress: "0x546b56f6a294750ea44d0b58ca2bb0a7201518e6",
