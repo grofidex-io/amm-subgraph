@@ -109,8 +109,8 @@ export function handlePoolCreated(event: PoolCreated): void {
     token0.whitelistPools = newPools;
   }
 
-  const token0Priority = getPriority(token0.id);
-  const token1Priority = getPriority(token1.id);
+  const token0Priority = getPriority(token0.id); //2 eth    1
+  const token1Priority = getPriority(token1.id); //3 usdt   2
 
   if (token0Priority < token1Priority) {
     pool.baseToken = token0.id;
@@ -164,8 +164,8 @@ export function handlePoolCreated(event: PoolCreated): void {
 }
 
 const getPriority = (tokenId: string): number => {
-  if (tokenId === EXPORT_USDT_ADDRESS) return 3;
-  if (tokenId === EXPORT_WETH_ADDRESS) return 2;
+  if (tokenId == EXPORT_USDT_ADDRESS) return 3;
+  if (tokenId == EXPORT_WETH_ADDRESS) return 2;
   return 1; // Other tokens
 };
 
